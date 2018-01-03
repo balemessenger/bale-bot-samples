@@ -3,7 +3,7 @@
 import asyncio
 
 from balebot.filters import *
-from balebot.handlers import MessageHandler
+from balebot.handlers import MessageHandler,CommandHandler
 from balebot.models.messages import *
 from balebot.updater import Updater
 from balebot.utils.logger import Logger
@@ -53,9 +53,9 @@ def conversation_starter(bot, update):
 def ask_contact(bot, update):
     user_peer = update.get_effective_user()
     bot.reply(update, "its a contact", success_callback=success, failure_callback=failure)
-    message = TextMessage("Thanks \nplease send a document you want to upload it")
+    message = TextMessage("Thanks \nplease send a document you want")
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
-    dispatcher.register_conversation_next_step_handler(update, MessageHandler(DocumentFilter(), upload_file))
+    dispatcher.register_conversation_next_step_handler(update, MessageHandler(DocumentFilter(), download_file))
 
 
 def no_contact(bot, update):
@@ -67,13 +67,18 @@ def no_contact(bot, update):
 
 
 def download_file(bot, update):
-    message = TextMessage("We got your document and want are downloading it now ")
+    message = TextMessage("we are downloading ... it with bot")
     user_peer = update.get_effective_user()
+    user_id = update.body.sender_user.peer_id
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
-    file_id = update.body.file_id
-    bot.download_file(file_id=file_id, user_id=user_peer.id, file_type="file", success_callback=final_download_success,
+    file_id = update.body.message.file_id
+    bot.download_file(file_id=file_id, user_id=user_id, file_type="file", success_callback=final_download_success,
                       failure_callback=failure)
-    dispatcher.register_conversation_next_step_handler(update, MessageHandler(VoiceFilter(), finish_conversion))
+    message = TextMessage("download was successful"
+                          "use below command to upload that document we already downloaded"
+                          " [/upload](send:/upload @first_bot/)")
+    bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
+    dispatcher.register_conversation_next_step_handler(update, CommandHandler("upload", upload_file))
 
 
 def upload_file(bot, update):
