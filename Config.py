@@ -1,6 +1,7 @@
 import logging
 
 
+# Config for logger
 class Config:
     base_url = "wss://api.bale.ai/v1/bots/"
     request_timeout = 5

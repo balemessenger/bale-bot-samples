@@ -1,77 +1,63 @@
-# pymessenger [![Build Status](https://travis-ci.org/davidchua/pymessenger.svg?branch=master)](https://travis-ci.org/davidchua/pymessenger)
+# Bale bot python samples [![Build Status](https://travis-ci.org/davidchua/pymessenger.svg?branch=master)](https://travis-ci.org/davidchua/pymessenger)
 
-Python Wrapper for [Facebook Messenger Platform](https://developers.facebook.com/docs/messenger-platform).
-
-__Disclaimer__: This wrapper is __NOT__ an official wrapper and do not attempt to represent Facebook in anyway.
+Python samples for [Bale messenger](https://bale.ai).
 
 ### About
 
-This wrapper has the following functions:
+This Samples are in five parts:
 
-* send_text_message(recipient_id, message)
-* send_message(recipient_id, message)
-* send_generic_message(recipient_id, elements)
-* send_button_message(recipient_id, text, buttons)
-* send_attachment(recipient_id, attachment_type, attachment_path)
-* send_attachment_url(recipient_id, attachment_type, attachment_url)
-* send_image(recipient_id, image_path)
-* send_image_url(recipient_id, image_url)
-* send_audio(recipient_id, audio_path)
-* send_audio_url(recipient_id, audio_url)
-* send_video(recipient_id, video_path)
-* send_video_url(recipient_id, video_url)
-* send_file(recipient_id, file_path)
-* send_file_url(recipient_id, file_url)
-* send_action(recipient_id, action)
-* send_raw(payload)
-* get_user_info(recipient_id)
+* simple_hear
+* text_conversion
+* photo_voice_conversion
+* document_conversion
+* purchase_conversion
 
-You can see the code/documentation for there in [bot.py](pymessenger/bot.py).
 
-The functions return the full JSON body of the actual API call to Facebook.
+The functions return the full JSON body of the actual API call to Bale.
 
 ### Register for an Access Token
 
-You'll need to setup a [Facebook App](https://developers.facebook.com/apps/), Facebook Page, get the Page Access Token and link the App to the Page before you can really start to use the Send/Receive service.
-
-[This quickstart guide should help](https://developers.facebook.com/docs/messenger-platform/quickstart)
+You'll need to create your bot by [@Bot_Father](https://web.bale.ai/#/im/u85515032), Bot_Father, give you a Token.
 
 ### Installation
 
 ```bash
-pip install pymessenger
+pip install -r requirements.txt
 ```
 
 ### Usage
 
 ```python
-from pymessenger.bot import Bot
+import asyncio
 
-bot = Bot(<access_token>, [optional: app_secret])
-bot.send_text_message(recipient_id, message)
+from balebot.filters import *
+from balebot.handlers import MessageHandler, CommandHandler
+from balebot.models.messages import *
+from balebot.updater import Updater
+
+updater = Updater(token="Your_Bot_Token_You_Give_from_BotFather",
+                  loop=asyncio.get_event_loop())
+bot = updater.bot
+dispatcher = updater.dispatcher
+
 ```
 
-__Note__: From Facebook regarding User IDs
-
-> These ids are page-scoped. These ids differ from those returned from Facebook Login apps which are app-scoped. You must use ids retrieved from a Messenger integration for this page in order to function properly.
-
-> If `app_secret` is initialized, an app_secret_proof will be generated and send with every request.
-> Appsecret Proofs helps further secure your client access tokens. You can find out more on the [Facebook Docs](https://developers.facebook.com/docs/graph-api/securing-requests#appsecret_proof)
+__Note__: you need set Config.py if you want to get logger
 
 
 ##### Sending a generic template message:
 
-> [Generic Template Messages](https://developers.facebook.com/docs/messenger-platform/implementation#receive_message) allows you to add cool elements like images, text all in a single bubble.
+__Note__:Generic Template Messages 
+> allows you to add cool text buttons, to a general text message.
 
 
 ```python
-from pymessenger.bot import Bot
-bot = Bot(<access_token>)
-elements = []
-element = Element(title="test", image_url="<arsenal_logo.png>", subtitle="subtitle", item_url="http://arsenal.com")
-elements.append(element)
-
-bot.send_generic_message(recipient_id, elements)
+def ask_question(bot, update):
+    general_message = TextMessage("a message")
+    btn_list = [TemplateMessageButton(text="yes", value="yes", action=0),
+                TemplateMessageButton(text="no", value="no", action=0)]
+    template_message = TemplateMessage(general_message=general_message, btn_list=btn_list)
+    bot.send_message(template_message, user_peer, success_callback=success, failure_callback=failure)
 ```
 
 Output:
