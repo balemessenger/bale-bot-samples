@@ -28,25 +28,25 @@ def failure(result, user_data):
 
 @dispatcher.command_handler(["talk"])
 def conversation_starter(bot, update):
-    message = TextMessage("Hi , nice to meet you :)\nplease tell me your name.")
+    message = TextMessage("Hi , nice to meet you :)\nplease send me your photo.")
     user_peer = update.get_effective_user()
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
-    dispatcher.register_conversation_next_step_handler(update, [MessageHandler(TextFilter(), ask_name),
-                                                                MessageHandler(DefaultFilter(), skip_name)])
+    dispatcher.register_conversation_next_step_handler(update, [MessageHandler(PhotoFilter(), ask_photo),
+                                                                MessageHandler(DefaultFilter(), skip_photo)])
 
 
-def ask_name(bot, update):
-    message = TextMessage("Thanks \nplease tell me your age")
+def ask_photo(bot, update):
+    message = TextMessage("Thanks \nplease send a voice message")
     user_peer = update.get_effective_user()
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
-    dispatcher.register_conversation_next_step_handler(update, MessageHandler(TextFilter(), finish_conversion))
+    dispatcher.register_conversation_next_step_handler(update, MessageHandler(VoiceFilter(), finish_conversion))
 
 
-def skip_name(bot, update):
-    message = TextMessage("So, you don't want to tell your name !\nplease just tell me your age")
+def skip_photo(bot, update):
+    message = TextMessage("So, you don't want to send me your photo !\nplease just give a voice message :(")
     user_peer = update.get_effective_user()
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
-    dispatcher.register_conversation_next_step_handler(update, MessageHandler(TextFilter(), finish_conversion))
+    dispatcher.register_conversation_next_step_handler(update, MessageHandler(VoiceFilter(), finish_conversion))
 
 
 def finish_conversion(bot, update):
