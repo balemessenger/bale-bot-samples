@@ -1,13 +1,9 @@
-"""Simple Bot to reply,text message and send and receive message for Telegram messages.
-This program is dedicated to the public domain under the CC0 license.
-This Bot uses the Updater class to handle the bot.
-First, a few handler functions are defined. Then, those functions are passed to
-the Dispatcher and registered at their respective places.
-Then, the bot is started and runs until we press Ctrl-C on the command line.
-Usage:
-Basic inline bot example. Applies different text transformations.
-Press Ctrl-C on the command line or send a signal to the process to stop the
-bot.
+"""Its a simple example of text message in your bot .
+At first you need to connect to server with your bot's token that you've given before.
+Second you import Updater and create your object updater and dispatcher from it. Next you need some
+functions, you defined before and two optional functions (success and failure) in order to log success
+and failure locally.
+At end you need updater.run() to run your bot and enjoy!
 """
 import asyncio
 
