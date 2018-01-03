@@ -25,19 +25,6 @@ def failure(result, user_data):
     print(user_data)
 
 
-def file_upload_success(result, user_data):
-    print("upload was successful : ", result)
-    print(user_data)
-    # file_id = user_data.get("file_id", None)
-    # user_id = user_data.get("user_id", None)
-    # url = user_data.get("url", None)
-    # dup = user_data.get("dup", None)
-
-    # bot.download_file(file_id=file_id, user_id=user_id, file_type="file",
-    #                   success_callback=final_download_success,
-    #                   failure_callback=failure)
-
-
 def final_download_success(result, user_data):
     print("download was successful : ", result)
 
@@ -72,10 +59,16 @@ def no_contact(bot, update):
                           "\n now send me a document")
     user_peer = update.get_effective_user()
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
-    dispatcher.register_conversation_next_step_handler(update, MessageHandler(VoiceFilter(), finish_conversion))
+    dispatcher.register_conversation_next_step_handler(update, MessageHandler(DocumentFilter(), download_file))
 
 
 def download_file(bot, update):
+    def success_get_download_url(result, user_data):
+        print("success : ", result)
+        url = str(result.body.url)
+        url_link = TextMessage("Link of downloaded photo:\n(Note : this link is for limited time)\n" + url)
+        bot.send_message(url_link, user_peer, success_callback=success, failure_callback=failure)
+
     message = TextMessage("Downloading ... ")
     user_peer = update.get_effective_user()
     user_id = update.body.sender_user.peer_id
@@ -83,6 +76,8 @@ def download_file(bot, update):
     file_id = update.body.message.file_id
     bot.download_file(file_id=file_id, user_id=user_id, file_type="file", success_callback=final_download_success,
                       failure_callback=failure)
+    bot.get_file_download_url(file_id, user_id, "file", success_callback=success_get_download_url,
+                              failure_callback=failure)
     message = TextMessage("Download was successful\n"
                           "use below command to upload that document we already downloaded\n"
                           "[/upload](send:/upload @first_bot/)")
@@ -91,16 +86,29 @@ def download_file(bot, update):
 
 
 def upload_file(bot, update):
+    def file_upload_success(result, user_data):
+        """Its the link of upload photo but u cant see anything with it because you need to take a token from server.
+            actually this link is just for uploading a file not download. If you want to download this file you should
+            use get_file_download_url() and take a token from server.
+        """
+        print("upload was successful : ", result)
+        print(user_data)
+        url = user_data.get("url", None)
+        url_message = TextMessage(url)
+        bot.send_message(url_message, user_peer, success_callback=success, failure_callback=failure)
+
     message = TextMessage("Uploading ...")
     user_peer = update.get_effective_user()
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
     bot.upload_file(file="../documents/upload_file", file_type="file", success_callback=file_upload_success,
                     failure_callback=failure)
-    message = TextMessage("Uploading is finish.\nyou can try it with this link\n"
-                          "(Note : this link is for limited time)")
+
+    message = TextMessage("Uploading is finish.\nyou can try this link and see nothing show to you\n"
+                          "finish conversion with below command\n"
+                          "[/finish](send:/finish @first_bot/)")
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
 
-    dispatcher.register_conversation_next_step_handler(update, MessageHandler(VoiceFilter(), finish_conversion))
+    dispatcher.register_conversation_next_step_handler(update, CommandHandler("finish", finish_conversion))
 
 
 def finish_conversion(bot, update):
