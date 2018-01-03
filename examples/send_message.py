@@ -68,6 +68,22 @@ def location_received(bot, update):
     bot.reply(update, "it is a location", success_callback=success, failure_callback=failure)
 
 
+@dispatcher.message_handler(PhotoFilter())
+def photo_message(bot, update):
+    message = update.get_effective_message()
+    user_peer = update.get_effective_user()
+    link_photo = bot.get_file_download_url(message.file_id, user_peer.peer_id, "photo",
+                                           success_callback=success,
+                                           failure_callback=failure)
+
+    # a = link_photo.body
+
+    print(str(link_photo))
+    # link_message = TextMessage(str(link_photo))
+    # bot.send_message(link_photo, user_peer, success_callback=success, failure_callback=failure)
+    # bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
+
+
 @dispatcher.message_handler(DocumentFilter())
 def some_document_file_received(bot, update):
     message = update.get_effective_message()

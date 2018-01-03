@@ -1,8 +1,13 @@
-
+# -*- coding: utf-8 -*-
+"""Its a simple example of connection between your bot and Bale server.
+At first you need to connect to server with your bot's token that you've given before.
+Second you import Updater and create your object updater and dispatcher from it. Next you need some
+functions, you defined before and two optional functions (success and failure) in order to log success
+and failure locally.
+At end you need updater.run() to run your bot and enjoy!
+"""
 import asyncio
 
-from balebot.filters import *
-from balebot.models.messages import *
 from balebot.updater import Updater
 
 # A token you give from BotFather when you create your bot set below
@@ -21,16 +26,6 @@ def failure(result, user_data):
     print(user_data)
 
 
-@dispatcher.message_handler(PhotoFilter())
-def a_purchase_message(bot, update):
-    message = update.get_effective_message()
-    user_peer = update.get_effective_user()
-    purchase_message = PurchaseMessage(msg=message, account_number=6037991822619544, amount=11100)
-    bot.send_message(purchase_message, user_peer, success_callback=success, failure_callback=failure)
-    bot.get_file_download_url(message.file_id, user_peer.peer_id, "photo", success_callback=success,
-                              failure_callback=failure)
-
-
 @dispatcher.error_handler()
 def error_handler(bot, update, error):
     if update:
@@ -44,4 +39,4 @@ def default_handler_func(bot, update):
                 failure_callback=failure)
 
 
-
+updater.run()
