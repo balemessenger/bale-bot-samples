@@ -3,11 +3,10 @@
 import asyncio
 
 from balebot.filters import *
-from balebot.handlers import MessageHandler,CommandHandler
+from balebot.handlers import MessageHandler, CommandHandler
 from balebot.models.messages import *
 from balebot.updater import Updater
-from balebot.utils.logger import Logger
-from Config import Config
+import datetime
 
 # A token you give from BotFather when you create your bot set below
 updater = Updater(token="114d273b48f04cd7c3be657328d2aa5521dae020",
@@ -27,16 +26,26 @@ def failure(result, user_data):
 
 
 def file_upload_success(result, user_data):
-    print("u success : ", result)
+    print("upload was successful : ", result)
     print(user_data)
+    # file_id = user_data.get("file_id", None)
+    # user_id = user_data.get("user_id", None)
+    # url = user_data.get("url", None)
+    # dup = user_data.get("dup", None)
+
+    # bot.download_file(file_id=file_id, user_id=user_id, file_type="file",
+    #                   success_callback=final_download_success,
+    #                   failure_callback=failure)
 
 
 def final_download_success(result, user_data):
-    print("d success : ", result)
+    print("download was successful : ", result)
+
     stream = user_data.get("byte_stream", None)
+    now = str(datetime.datetime.now().time().strftime('%Y-%m-%d_%H:%M:%f'))
     print(type(stream))
 
-    with open("hello", "wb") as file:
+    with open("../documents/doc_downloaded_" + now, "wb") as file:
         file.write(stream)
         file.close()
 
@@ -67,25 +76,30 @@ def no_contact(bot, update):
 
 
 def download_file(bot, update):
-    message = TextMessage("we are downloading ... it with bot")
+    message = TextMessage("Downloading ... ")
     user_peer = update.get_effective_user()
     user_id = update.body.sender_user.peer_id
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
     file_id = update.body.message.file_id
     bot.download_file(file_id=file_id, user_id=user_id, file_type="file", success_callback=final_download_success,
                       failure_callback=failure)
-    message = TextMessage("download was successful"
-                          "use below command to upload that document we already downloaded"
-                          " [/upload](send:/upload @first_bot/)")
+    message = TextMessage("Download was successful\n"
+                          "use below command to upload that document we already downloaded\n"
+                          "[/upload](send:/upload @first_bot/)")
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
     dispatcher.register_conversation_next_step_handler(update, CommandHandler("upload", upload_file))
 
 
 def upload_file(bot, update):
-    message = TextMessage("Download has finished successfully and we are uploading it now")
+    message = TextMessage("Uploading ...")
     user_peer = update.get_effective_user()
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
-    bot.upload_file(file="contact", file_type="file", success_callback=file_upload_success, failure_callback=failure)
+    bot.upload_file(file="../documents/upload_file", file_type="file", success_callback=file_upload_success,
+                    failure_callback=failure)
+    message = TextMessage("Uploading is finish.\nyou can try it with this link\n"
+                          "(Note : this link is for limited time)")
+    bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
+
     dispatcher.register_conversation_next_step_handler(update, MessageHandler(VoiceFilter(), finish_conversion))
 
 
