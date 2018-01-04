@@ -100,7 +100,7 @@ def upload_file(bot, update):
     message = TextMessage("Uploading ...")
     user_peer = update.get_effective_user()
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
-    bot.upload_file(file="../documents/upload_file", file_type="file", success_callback=file_upload_success,
+    bot.upload_file(file="../documents/Bale", file_type="file", success_callback=file_upload_success,
                     failure_callback=failure)
 
     message = TextMessage("Uploading is finish.\nyou can try this link and see nothing show to you\n"

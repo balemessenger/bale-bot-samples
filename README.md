@@ -45,6 +45,42 @@ dispatcher = updater.dispatcher
 __Note__: you need set Config.py if you want to get logger
 
 
+##### Sending a generic simple message:
+
+__Note__:Simple bot hear function
+> allows you to hear and answer the client.
+
+
+```python
+@dispatcher.message_handler(filters=TextFilter(keywords=["hello"]))  # filter text the client enter to bot
+def hear(bot, update):
+    message = TextMessage('Hello')
+    user_peer = update.get_effective_user()
+    bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
+```
+
+Output:
+
+![Generic Bot Output](image_9390.png)
+
+##### Sending a simple voice message:
+__Note__:You should upload it first!
+
+> allows you to send voice message(you can send a document in a same way).
+
+
+```python
+def send_voice(bot, update):
+    user_peer = update.get_effective_user()
+    v_message = VoiceMessage(file_id=file_id, access_hash=access_hash, name="Hello", file_size='259969',
+                                 mime_type="audio/mpeg",
+                                 duration=20, file_storage_version=1)
+    bot.send_message(v_message, user_peer, success_callback=success, failure_callback=failure)
+```
+
+Output:
+
+![Generic Bot Output](image_3200.png)
 ##### Sending a generic template message:
 
 __Note__:Generic Template Messages 
@@ -62,16 +98,19 @@ def ask_question(bot, update):
 
 Output:
 
-![Generic Bot Output]()
+![Generic Bot Output](image_3200.png)
+##### Sending a generic purchase message:
 
-##### Sending an image/video/file using an URL:
+> allows you send purchase message that clint can pay it by press "pay" button.
+
 
 ```python
-from pymessenger.bot import Bot
-bot = Bot(<access_token>)
-image_url = "http://url/to/image.png"
-bot.send_image_url(recipient_id, image_url)
+
 ```
+
+Output:
+
+![Generic Bot Output](image_3200.png)
 
 ### Todo
 
