@@ -1,4 +1,4 @@
-# Bale bot python samples [![Build Status](https://travis-ci.org/davidchua/pymessenger.svg?branch=master)](https://travis-ci.org/davidchua/pymessenger)
+# Bale bot python samples [![Build Status](https://bale.ai/)](git_hub address)
 
 Python samples for [Bale messenger](https://bale.ai).
 
@@ -62,7 +62,7 @@ def ask_question(bot, update):
 
 Output:
 
-![Generic Bot Output](https://cloud.githubusercontent.com/assets/68039/14519266/4c7033b2-0250-11e6-81a3-f85f3809d86c.png)
+![Generic Bot Output]()
 
 ##### Sending an image/video/file using an URL:
 

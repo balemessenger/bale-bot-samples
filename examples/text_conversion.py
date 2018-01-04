@@ -38,6 +38,8 @@ def conversation_starter(bot, update):
 def ask_name(bot, update):
     message = TextMessage("Thanks \nplease tell me your age")
     user_peer = update.get_effective_user()
+    name = update.body.message.text
+    dispatcher.set_conversation_data(update=update, key="name", value=name)  # set a key and value in RAM (Not durable)
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
     dispatcher.register_conversation_next_step_handler(update, MessageHandler(TextFilter(), finish_conversion))
 
@@ -53,6 +55,10 @@ def finish_conversion(bot, update):
     message = TextMessage("Thanks \ngoodbye ;)")
     user_peer = update.get_effective_user()
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
+    name = dispatcher.get_conversation_data(update, key="name")
+    age = update.body.message.text
+    output = TextMessage(name + age)
+    bot.send_message(output, user_peer, success_callback=success, failure_callback=failure)
     dispatcher.finish_conversation(update)
 
 
