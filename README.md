@@ -98,31 +98,8 @@ def ask_question(bot, update):
 
 Output:
 
-![Generic Bot Output](image_3200.png)
 ##### Sending a generic purchase message:
 
 > allows you send purchase message that clint can pay it by press "pay" button.
 
-
-```python
-
-```
-
-Output:
-
-![Generic Bot Output](image_3200.png)
-
-### Todo
-
-* Structured Messages
-* Receipt Messages
-* Quick Replies
-* Airlines
-* Tests!
-
-### Example
-
-![Screenshot of Echo Facebook Bot](https://cloud.githubusercontent.com/assets/68039/14516627/905c84ae-0237-11e6-918e-2c2ae9352f7d.png)
-
-You can find an example of an Echo Facebook Bot in ```examples/```
-
+Thanks!
