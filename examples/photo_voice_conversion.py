@@ -1,4 +1,4 @@
-"""Text simple conversion with bot
+"""Voice and Photo simple conversion with bot
 """
 import asyncio
 import base64

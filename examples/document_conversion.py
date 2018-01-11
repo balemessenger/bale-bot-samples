@@ -1,4 +1,4 @@
-"""Text simple conversion with bot
+"""Doc simple conversion with bot
 """
 import asyncio
 
