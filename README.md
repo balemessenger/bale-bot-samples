@@ -102,4 +102,15 @@ Output:
 
 > allows you send purchase message that clint can pay it by press "pay" button.
 
+```python
+
+@dispatcher.message_handler(PhotoFilter())
+def purchase_message(bot, update):
+    message = "your message"
+    user_peer = update.get_effective_user()
+    first_purchase_message = PurchaseMessage(msg=message, account_number="your cart number", amount="how much do you want to ask",
+                                             money_request_type=MoneyRequestType.normal)
+    bot.send_message(first_purchase_message, user_peer, success_callback=success, failure_callback=failure)
+    dispatcher.finish_conversation()
+```
 Thanks!
