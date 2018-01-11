@@ -1,4 +1,5 @@
-# Bale bot python samples [![Build Status](https://avatars1.githubusercontent.com/u/35299314?s=200&v=4)](https://github.com/balemessenger)
+# Bale bot python samples 
+[![Build Status](https://avatars1.githubusercontent.com/u/35299314?s=200&v=4)](https://github.com/balemessenger)
 
 Python samples for [Bale messenger](https://bale.ai).
 
