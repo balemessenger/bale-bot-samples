@@ -1,4 +1,4 @@
-# Bale bot python samples [![Build Status](https://bale.ai/)](git_hub address)
+# Bale bot python samples [![Build Status](https://avatars1.githubusercontent.com/u/35299314?s=200&v=4)](https://github.com/balemessenger)
 
 Python samples for [Bale messenger](https://bale.ai).
 
@@ -17,7 +17,7 @@ The functions return the full JSON body of the actual API call to Bale.
 
 ### Register for an Access Token
 
-You'll need to create your bot by [@Bot_Father](https://web.bale.ai/#/im/u85515032), Bot_Father, give you a Token.
+You'll need to create your bot by [@Bot_Father](https://web.bale.ai/), Bot_Father, give you a Token.
 
 ### Installation
 
@@ -80,7 +80,7 @@ def send_voice(bot, update):
 
 Output:
 
-![Generic Bot Output](image_3200.png)
+![Generic Bot Output](https://github.com/balemessenger/blob/master/assets/logo.png)
 ##### Sending a generic template message:
 
 __Note__:Generic Template Messages 

@@ -6,8 +6,6 @@ from balebot.filters import *
 from balebot.handlers import MessageHandler
 from balebot.models.messages import *
 from balebot.updater import Updater
-from balebot.utils.logger import Logger
-from Config import Config
 
 # A token you give from BotFather when you create your bot set below
 updater = Updater(token="114d273b48f04cd7c3be657328d2aa5521dae020",
