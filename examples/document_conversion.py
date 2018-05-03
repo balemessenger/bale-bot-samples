@@ -9,19 +9,19 @@ from balebot.updater import Updater
 import datetime
 
 # A token you give from BotFather when you create your bot set below
-updater = Updater(token="114d273b48f04cd7c3be657328d2aa5521dae020",
+updater = Updater(token="PUT YOUR TOKEN HERE",
                   loop=asyncio.get_event_loop())
 bot = updater.bot
 dispatcher = updater.dispatcher
 
 
-def success(result, user_data):
-    print("success : ", result)
+def success(response, user_data):
+    print("success : ", response)
     print(user_data)
 
 
-def failure(result, user_data):
-    print("failure : ", result)
+def failure(response, user_data):
+    print("failure : ", response)
     print(user_data)
 
 
@@ -32,12 +32,12 @@ def final_download_success(result, user_data):
     now = str(datetime.datetime.now().time().strftime('%Y-%m-%d_%H:%M:%f'))
     print(type(stream))
 
-    with open("../documents/doc_downloaded_" + now, "wb") as file:
+    with open("../files/doc_downloaded_" + now, "wb") as file:
         file.write(stream)
         file.close()
 
 
-@dispatcher.command_handler(["talk"])
+@dispatcher.command_handler(["/start"])
 def conversation_starter(bot, update):
     message = TextMessage("Hi , nice to meet you :)\nplease send me a contact.")
     user_peer = update.get_effective_user()
@@ -80,7 +80,7 @@ def download_file(bot, update):
                               failure_callback=failure)
     message = TextMessage("Download was successful\n"
                           "use below command to upload that document we already downloaded\n"
-                          "[/upload](send:/upload @first_bot/)")
+                          "[/upload](send:/upload)")
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
     dispatcher.register_conversation_next_step_handler(update, CommandHandler("upload", upload_file))
 
@@ -100,15 +100,15 @@ def upload_file(bot, update):
     message = TextMessage("Uploading ...")
     user_peer = update.get_effective_user()
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
-    bot.upload_file(file="../documents/Bale", file_type="file", success_callback=file_upload_success,
+    bot.upload_file(file="../files/upload_file_test.jpeg", file_type="file", success_callback=file_upload_success,
                     failure_callback=failure)
 
     message = TextMessage("Uploading is finish.\nyou can try this link and see nothing show to you\n"
                           "finish conversion with below command\n"
-                          "[/finish](send:/finish @first_bot/)")
+                          "[/finish](send:/finish)")
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
 
-    dispatcher.register_conversation_next_step_handler(update, CommandHandler("finish", finish_conversion))
+    dispatcher.register_conversation_next_step_handler(update, CommandHandler("/finish", finish_conversion))
 
 
 def finish_conversion(bot, update):

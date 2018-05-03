@@ -9,23 +9,22 @@ from balebot.models.messages import *
 from balebot.updater import Updater
 
 # A token you give from BotFather when you create your bot set below
-updater = Updater(token="114d273b48f04cd7c3be657328d2aa5521dae020",
+updater = Updater(token="PUT YOUR TOKEN HERE",
                   loop=asyncio.get_event_loop())
 bot = updater.bot
 dispatcher = updater.dispatcher
 
 
-def success(result, user_data):
-    print("success : ", result)
+def success(response, user_data):
+    print("success : ", response)
     print(user_data)
 
 
-def failure(result, user_data):
-    print("failure : ", result)
+def failure(response, user_data):
+    print("failure : ", response)
     print(user_data)
 
-
-@dispatcher.command_handler(["talk"])
+@dispatcher.command_handler(["/start"])
 def conversation_starter(bot, update):
     message = TextMessage("Hi , nice to meet you :)\nplease send me your photo.")
     user_peer = update.get_effective_user()
@@ -34,6 +33,7 @@ def conversation_starter(bot, update):
                                                                 MessageHandler(DefaultFilter(), skip_photo)])
 
 
+@dispatcher.message_handler(PhotoFilter())
 def ask_photo(bot, update):
     user_peer = update.get_effective_user()
 
@@ -52,7 +52,7 @@ def ask_photo(bot, update):
 
         bot.send_message(v_message, user_peer, success_callback=success, failure_callback=failure)
 
-    bot.upload_file(file="../documents/Bale", file_type="file", success_callback=file_upload_success,
+    bot.upload_file(file="../files/upload_file_test.jpeg", file_type="file", success_callback=file_upload_success,
                     failure_callback=failure)
     message = TextMessage("Thanks \nplease send a Hello voice message.")
     user_peer = update.get_effective_user()
