@@ -9,23 +9,23 @@ from balebot.models.messages.banking.money_request_type import MoneyRequestType
 from balebot.updater import Updater
 
 # A token you give from BotFather when you create your bot set below
-updater = Updater(token="114d273b48f04cd7c3be657328d2aa5521dae020",
+updater = Updater(token="PUT YOUR TOKEN HERE",
                   loop=asyncio.get_event_loop())
 bot = updater.bot
 dispatcher = updater.dispatcher
 
 
-def success(result, user_data):
-    print("success : ", result)
+def success(response, user_data):
+    print("success : ", response)
     print(user_data)
 
 
-def failure(result, user_data):
-    print("failure : ", result)
+def failure(response, user_data):
+    print("failure : ", response)
     print(user_data)
 
 
-@dispatcher.command_handler(["talk"])
+@dispatcher.command_handler(["/start"])
 def conversation_starter(bot, update):
     message = TextMessage("Hi , nice to meet you :)\nplease send me a photo")
     user_peer = update.get_effective_user()
@@ -37,10 +37,10 @@ def conversation_starter(bot, update):
 def purchase_message(bot, update):
     message = update.get_effective_message()
     user_peer = update.get_effective_user()
-    first_purchase_message = PurchaseMessage(msg=message, account_number=6037991822619544, amount=11100,
+    first_purchase_message = PurchaseMessage(msg=message, account_number=6037991067471130, amount=10,
                                              money_request_type=MoneyRequestType.normal)
     bot.send_message(first_purchase_message, user_peer, success_callback=success, failure_callback=failure)
-    dispatcher.finish_conversation()
+    dispatcher.finish_conversation(update)
 
 
 updater.run()

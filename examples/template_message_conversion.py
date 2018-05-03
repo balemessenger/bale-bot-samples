@@ -8,25 +8,25 @@ from balebot.models.messages import *
 from balebot.updater import Updater
 
 # A token you give from BotFather when you create your bot set below
-updater = Updater(token="114d273b48f04cd7c3be657328d2aa5521dae020",
+updater = Updater(token="PUT YOUR TOKEN HERE",
                   loop=asyncio.get_event_loop())
 bot = updater.bot
 dispatcher = updater.dispatcher
 
 
-def success(result, user_data):
-    print("success : ", result)
+def success(response, user_data):
+    print("success : ", response)
     print(user_data)
 
 
-def failure(result, user_data):
-    print("failure : ", result)
+def failure(response, user_data):
+    print("failure : ", response)
     print(user_data)
 
 
-@dispatcher.command_handler(["talk"])
+@dispatcher.command_handler(["/start"])
 def conversation_starter(bot, update):
-    message = TextMessage("Hi , come try a interesting message :)\nplease tell me a [yes, no] question.")
+    message = TextMessage("*Hi , come try a interesting message* \nplease tell me a *yes-no* question.")
     user_peer = update.get_effective_user()
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
     dispatcher.register_conversation_next_step_handler(update, MessageHandler(TextFilter(), ask_question))
@@ -34,12 +34,14 @@ def conversation_starter(bot, update):
 
 def ask_question(bot, update):
     user_peer = update.get_effective_user()
-    my_message = TextMessage("Your Template Message created!")
+    my_message = TextMessage("*Your Template Message created!*")
     bot.send_message(my_message, user_peer, success_callback=success, failure_callback=failure)
-    message = str(update.body.message.text)
-    general_message = TextMessage(message)
+    # Set client message as general message of a template message
+    general_message = update.get_effective_message()
+    # Create how many buttons you like with TemplateMessageButton class
     btn_list = [TemplateMessageButton(text="yes", value="yes", action=0),
                 TemplateMessageButton(text="no", value="no", action=0)]
+    # Create a Template Message
     template_message = TemplateMessage(general_message=general_message, btn_list=btn_list)
     bot.send_message(template_message, user_peer, success_callback=success, failure_callback=failure)
     dispatcher.register_conversation_next_step_handler(update,
@@ -49,29 +51,32 @@ def ask_question(bot, update):
                                                                        negative_answer)])
 
 
+# Use when answer is 'yes'
 def positive_answer(bot, update):
-    message = TextMessage("Your answer is 'YES' \n"
+    message = TextMessage("*Your have answered 'yes'* \n"
                           "end the conversion with below command: \n"
-                          "[/end](send:/end @first_bot/)")
+                          "[/end](send:/end)")
     user_peer = update.get_effective_user()
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
-    dispatcher.register_conversation_next_step_handler(update, CommandHandler("end", finish_conversion))
+    # Use CommandHandler to handle a command which is sent by client
+    dispatcher.register_conversation_next_step_handler(update, CommandHandler("/end", finish_conversion))
 
 
+# Use when answer is 'no'
 def negative_answer(bot, update):
-    message = TextMessage("Your answer is 'NO' \n"
+    message = TextMessage("*Your have answered 'no'* \n"
                           "Write a new question or end the conversion with below command: \n"
-                          "[/end](send:/end @first_bot/)")
+                          "[/end](send:/end)")
     user_peer = update.get_effective_user()
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
-    dispatcher.register_conversation_next_step_handler(update, [MessageHandler(TextFilter(), ask_question),
-                                                                CommandHandler("end", finish_conversion)])
+    dispatcher.register_conversation_next_step_handler(update, [CommandHandler("/end", finish_conversion)])
 
 
 def finish_conversion(bot, update):
-    message = TextMessage("Thanks \ngoodbye ;)")
+    message = TextMessage("*Thanks* \ngoodbye ;)")
     user_peer = update.get_effective_user()
     bot.send_message(message, user_peer, success_callback=success, failure_callback=failure)
+    # Finish conversation
     dispatcher.finish_conversation(update)
 
 
