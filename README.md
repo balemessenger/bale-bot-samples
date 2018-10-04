@@ -38,7 +38,6 @@ from balebot.updater import Updater
 
 updater = Updater(token="Your_Bot_Token_You_Give_from_BotFather",
                   loop=asyncio.get_event_loop())
-bot = updater.bot
 dispatcher = updater.dispatcher
 
 ```
