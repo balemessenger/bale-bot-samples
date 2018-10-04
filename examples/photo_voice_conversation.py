@@ -54,7 +54,7 @@ def get_voice(bot, update):
 
     bot.send_photo(user_peer=user_peer, image="./assets/happy-bot.jpeg", caption_text="caption comes here!",
                    name="bale.jpg", file_storage_version=1, mime_type="image/jpeg",
-                   success_callback=success_send_photo_message)
+                   success_callback=success_send_photo_message,failure_callback=failure_send_message)
 
 
 def skip_voice(bot, update):
