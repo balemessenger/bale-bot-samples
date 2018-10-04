@@ -2,7 +2,7 @@
 
 import asyncio
 
-from balebot.filters import TextFilter
+from balebot.filters import DefaultFilter
 from balebot.models.messages import TextMessage
 from balebot.updater import Updater
 
@@ -24,7 +24,7 @@ def failure(response, user_data):
     print(user_data)
 
 
-@dispatcher.message_handler(filters=TextFilter(keywords=["Hello"]))  # filter text the client enter to bot
+@dispatcher.message_handler(filters=DefaultFilter())
 def echo(bot, update):
     message = TextMessage('*Hello*')
     # Send a message to client
