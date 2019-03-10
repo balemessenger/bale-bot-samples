@@ -1,7 +1,7 @@
 aiohttp==2.3.7
 async-timeout==2.0.0
 asyncio==3.4.3
-balebot==1.4.10
+balebot==1.7.14
 chardet==3.0.4
 graypy==0.2.14
 idna==2.6
