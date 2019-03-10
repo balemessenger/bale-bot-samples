@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 """Text simple conversation with bot."""
 import asyncio
 
@@ -8,24 +11,26 @@ from balebot.updater import Updater
 from balebot.utils.logger import Logger
 
 # Bale Bot Authorization Token
-updater = Updater(token="PUT YOUR TOKEN HERE",
+updater = Updater(token="TOKEN",
                   loop=asyncio.get_event_loop())
 dispatcher = updater.dispatcher
-my_logger = Logger.get_logger()  # Create a logger and name it my_logger
+
+# Enable logging
+logger = Logger.get_logger()
 
 
 def success_send_message(response, user_data):
     kwargs = user_data['kwargs']
     update = kwargs["update"]
     user_peer = update.get_effective_user()
-    my_logger.info("Your message has been sent successfully.", extra={"user_id": user_peer.peer_id, "tag": "info"})
+    logger.info("Your message has been sent successfully.", extra={"user_id": user_peer.peer_id, "tag": "info"})
 
 
 def failure_send_message(response, user_data):
     kwargs = user_data['kwargs']
     update = kwargs["update"]
     user_peer = update.get_effective_user()
-    my_logger.error("Sending message has been failed", extra={"user_id": user_peer.peer_id, "tag": "error"})
+    logger.error("Sending message has been failed", extra={"user_id": user_peer.peer_id, "tag": "error"})
 
 
 @dispatcher.command_handler(["/start"])
@@ -34,7 +39,7 @@ def conversation_starter(bot, update):
     # Get client user object by a function called (get_effective_user)
     user_peer = update.get_effective_user()
     # Set any user data in kwargs mode
-    kwargs = {"message": message, "user_peer": user_peer}
+    kwargs = {"message": message, "update": update}
     bot.send_message(message, user_peer, success_callback=success_send_message, failure_callback=failure_send_message,
                      kwargs=kwargs)
     # You can put more than one Filters for your handler
@@ -51,7 +56,7 @@ def ask_name(bot, update):
     name_text = name_obj.text
     # Set a conversation data in RAM (Not durable)
     dispatcher.set_conversation_data(update=update, key="name", value=name_text)
-    kwargs = {"message": message, "user_peer": user_peer}
+    kwargs = {"message": message, "update": update}
     bot.send_message(message, user_peer, success_callback=success_send_message, failure_callback=failure_send_message,
                      kwargs=kwargs)
     dispatcher.register_conversation_next_step_handler(update,
@@ -63,7 +68,9 @@ def ask_name(bot, update):
 def skip_name(bot, update):
     message = TextMessage("*So, you don't want to tell your name!*\nplease just tell me your age")
     user_peer = update.get_effective_user()
-    bot.send_message(message, user_peer, success_callback=success_send_message, failure_callback=failure_send_message)
+    kwargs = {'update': update}
+    bot.send_message(message, user_peer, success_callback=success_send_message, failure_callback=failure_send_message,
+                     kwargs=kwargs)
     no_name = "no name"
     dispatcher.set_conversation_data(update=update, key="name", value=no_name)
     dispatcher.register_conversation_next_step_handler(update, MessageHandler(TextFilter(), finish_conversion))
@@ -72,12 +79,16 @@ def skip_name(bot, update):
 def finish_conversion(bot, update):
     message = TextMessage("*Thanks!*\ngoodbye ;)")
     user_peer = update.get_effective_user()
-    bot.send_message(message, user_peer, success_callback=success_send_message, failure_callback=failure_send_message)
+    kwargs = {'update': update}
+    bot.send_message(message, user_peer, success_callback=success_send_message, failure_callback=failure_send_message,
+                     kwargs=kwargs)
     name = dispatcher.get_conversation_data(update, key="name")
     age = update.get_effective_message().text
     output = TextMessage("*Name:* " + name + "\n" + "*Age:* " + age)
-    bot.send_message(output, user_peer, success_callback=success_send_message, failure_callback=failure_send_message)
+    bot.send_message(output, user_peer, success_callback=success_send_message, failure_callback=failure_send_message,
+                     kwargs=kwargs)
     dispatcher.finish_conversation(update)
 
 
-updater.run()
+if __name__ == '__main__':
+    updater.run()

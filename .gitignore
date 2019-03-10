@@ -157,6 +157,8 @@ pip-selfcheck.json
 
 learn.py
 
+Dockerfile*
+docker-compose*
 test data
 /new_bot_test.py
 /hello
