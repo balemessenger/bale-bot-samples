@@ -24,6 +24,7 @@ def main():
     # get the first pending update_id, this is so we can skip over it in case
     # we get an "Unauthorized" exception.
     try:
+        bot.delete_webhook()
         update_id = bot.get_updates()[0].update_id
     except IndexError:
         update_id = None
