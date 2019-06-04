@@ -18,7 +18,7 @@ def main():
     """Run the bot."""
     global update_id
     # Telegram Bot Authorization Token
-    bot = telegram.Bot(token='TOKEN',
+    bot = telegram.Bot(token='1165630251:b967e26b2029ab2a151f32b55a9b1be4eda43ac0',
                        base_url="https://tapi.bale.ai/")
 
     # get the first pending update_id, this is so we can skip over it in case
