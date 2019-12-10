@@ -25,7 +25,8 @@ You'll need to create your bot by [@Bot_Father](https://web.bale.ai/), Bot_Fathe
 ```bash
 pip install -r requirements.txt
 ``` 
-# DEPRECATED use [new api exmaples](https://github.com/balemessenger/bale-bot-samples/tree/master/new_api_example) 
+# DEPRECATED 
+use [new api exmaples](https://github.com/balemessenger/bale-bot-samples/tree/master/new_api_example) 
 ### Usage
 
 ```python
