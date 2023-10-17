@@ -1,5 +1,42 @@
-# Bale bot python samples 
 [![Build Status](https://avatars1.githubusercontent.com/u/35299314?s=200&v=4)](https://github.com/balemessenger)
+
+# 1-Bale bot **CURL** Step by Step instruction (NEW 2023)
+
+   Hello, Welcome to PRACTICAL step by step beginners instruction to use Bale bot send first message to a Bale group.
+in the Bale developer network there is a very poor description about it and here a nice and sweet description for you.
+
+> [!NOTE]
+>This is simple one line command to send a text message
+>
+
+#### get ready! and go...!
+
+1. Open bale application
+2. Search for a **botfother**
+3. Add a bot in bot father with given structions
+4. Get bot **tocken** from bot father
+5. Create a group
+6. Add created bot (in step 3) to that group
+7. Add chat bot getchatid -  **@Fgetchatbot** to that group
+8. Chatbot give's you a chat_id of that group (a number)
+9. Replace the:
+    - tocken (**in step 4**) 
+    - chat_id (**in step 8**)
+    - replace text = Hello... in url below (also delete {} ) hit enter key ! BoooM ;) :
+
+  ```curl  https://tapi.bale.ai/{bot-token-paste-here}/sendMessage --data "chat_id={chat_id_paste_here}&text=HelloAll" ```
+
+## Finish !
+  
+> [!IMPORTANT]
+> This link for using curl given in bale website don't work sometimes or some consoles!
+> ```
+>curl -X POST   https://tapi.bale.ai/bot{token}/sendMessage  -d '{"chat_id": 12343, "text": "Hello World!"}'
+> ```
+
+
+  
+# 2- Python user in Bale bot
 
 Python samples for [Bale messenger](https://bale.ai).
 
